@@ -1,0 +1,38 @@
+auth_enabled: false
+
+server:
+  http_listen_port: 3200
+  grpc_listen_port: 4317
+
+ingester:
+  lifecycler:
+    address: 127.0.0.1
+    ring:
+      kvstore:
+        store: inmemory
+      replication_factor: 1
+    final_sleep: 0s
+
+storage:
+  trace:
+    backend: local
+    local:
+      path: /tmp/tempo/traces
+
+compactor:
+  compaction:
+    compacted_block_retention: 48h
+    max_block_bytes: 500000000
+    compaction_window: 1h
+
+distributor:
+  receivers:
+    otlp:
+      protocols:
+        grpc:
+    jaeger:
+      protocols:
+        grpc:
+        thrift_binary:
+        thrift_compact:
+        thrift_http:
